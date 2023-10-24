@@ -1,22 +1,40 @@
+from collections import defaultdict, deque
+
 def solution(tickets):
-    answer = []
+    answer = ['ICN']
     N = len(tickets)
-    tickets.sort(key=lambda x:x[1])
+    ticket_dict = defaultdict(list)
+    dest_dict = defaultdict(list)
     
-    def dfs(v,visited,path):
-        nonlocal tickets
-        if len(path)==N+1:
-            answer.append(path)
-            return True
+    for i,(t0,t1) in enumerate(tickets):
+        ticket_dict[t0].append([t1,i])
+        ticket_dict[t1]
+        dest_dict[t1].append(t0); dest_dict[t0]
+    final_destination = 0
+    for t in ticket_dict.keys():
+        ticket_dict[t].sort()
+        if not ticket_dict[t]:
+            final_destination = t
+    
+    def dfs(graph,v,i,visited):
+        nonlocal final_destination
         
-        for i,(dep,arr) in enumerate(tickets):
-            if dep == v and not visited[i]:
-                visited[i] = 1
-                dfs(arr, visited,path+[arr])
-                visited[i] = 0
+        for new_v,new_i in graph[v]:
+            if not visited[new_i]:
+                if new_v==final_destination and not visited[i]==N-1:
+                    print(new_v,new_i)
+                    pass
+                else:
+                    visited[new_i] = visited[i]+1
+                    dfs(graph,new_v,new_i,visited)
+                    pass
     
+    v='ICN'; i=ticket_dict['ICN'][0][1]
     visited = [0 for _ in range(N)]
-    dfs('ICN', visited,['ICN'])
-    answer.sort()
+    dfs(ticket_dict, v, i , visited)
     
-    return answer[0]
+    answer_idx = sorted(range(N), key=lambda x:visited[x])
+    answer += [tickets[i][1] for i in answer_idx]
+    print(visited)
+    print([tickets[i] for i in answer_idx])
+    return answer
