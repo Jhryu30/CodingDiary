@@ -25,14 +25,5 @@ for _ in range(T):
       team[t][2] = i+1
 
 
-  result, score, fifth = 0,1000,0
-  for t in team:
-    if team[t][0]==6:
-      if team[t][1]<score:
-        result = t
-        score = team[t][1]
-        fifth = team[t][2]
-      elif team[t][1]==score and fifth>team[t][2]:
-        result = t
-        fifth = team[t][2]
+  result = min(team.keys(), key=lambda x:(team[x][1],team[x][2]))
   print(result)
