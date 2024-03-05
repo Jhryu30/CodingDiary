@@ -1,17 +1,17 @@
-from collections import deque
-
+from collections import defaultdict, deque
 def solution(n, edge):
     answer = 0
     
-    graph = [[] for _ in range(n+1)]
-    for e0,e1 in edge:
-        graph[e0].append(e1); graph[e1].append(e0)
     visited = [0 for _ in range(n+1)]
+    graph = defaultdict(list)
+    for a,b in edge:
+        graph[a].append(b); graph[b].append(a)
     
-    def dfs(graph, v, visited):
+    def bfs():
+        nonlocal graph, visited
         queue = deque()
-        queue.append(v)
-        visited[v]=1
+        queue.append(1)
+        visited[1] = 1
         
         while queue:
             v = queue.popleft()
@@ -20,11 +20,10 @@ def solution(n, edge):
                     visited[new_v] = visited[v]+1
                     queue.append(new_v)
                     
-    dfs(graph, 1, visited)
-    
-    far = max(visited)              
-    for v in visited:
-        if v==far:
+    bfs()
+    depth = max(visited)
+    for v in range(1,n+1):
+        if visited[v]==depth:
             answer += 1
             
     return answer
