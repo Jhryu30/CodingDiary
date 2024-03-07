@@ -25,15 +25,8 @@ def solution(N, number):
                 for b in depth_dict[depth2]:
                     if a==0 or b==0:
                         continue
-                    for op in '+-*/':
-                        new_v = int(eval(str(a)+op+str(b)))
-                        if new_v<=32000 and not visited[new_v]:
-                            depth_dict[depth].append(new_v)
-                            visited[new_v] = 1
-                            if new_v==number:
-                                return depth
-                    for op in '-/':
-                        new_v = int(eval(str(b)+op+str(a)))
+                    new = [a+b,a-b,a*b,a//b,b-a,b//a]
+                    for new_v in new:
                         if new_v<=32000 and not visited[new_v]:
                             depth_dict[depth].append(new_v)
                             visited[new_v] = 1
