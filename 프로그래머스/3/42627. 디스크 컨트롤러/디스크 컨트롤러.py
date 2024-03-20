@@ -1,18 +1,24 @@
-from collections import deque
+from heapq import heappush, heappop
 
 def solution(jobs):
     answer = 0
+    jobs.sort()
+    heap = []
+    idx,N = 0,len(jobs)
     
-    jobs.sort(key=lambda x:[x[1],x[0]])
-    jobs = deque(jobs)
-    
-    t=0
-    while jobs:
-        job = jobs.pop()
-        if job[0]<=t:
-            t+=job[0]
-        else:
-            jobs.append(job)
-            jobs.sort()
+    time = 0
+    while idx<N or heap:
+        while idx<N and jobs[idx][0]<=time:
+            called,duration = jobs[idx]
+            wait = duration-called # +time
+            heappush(heap,(duration,called))
+            idx +=1
             
-    return answer
+        if heap:
+            duration,called = heappop(heap)
+            answer += time+duration-called
+            time += duration
+        else:
+            time += 1
+        
+    return answer//N
