@@ -1,25 +1,23 @@
 from collections import deque
 
 def solution(routes):
-    answer = 1
-    routes.sort(key=lambda x: (x[0],x[1]))
+    answer = 0
+    routes = deque(sorted(routes))
     
-    queue = deque(routes)
-    x0,y0 = queue.popleft()
-    flag = y0
-    
-    while queue:
-        x1,y1 = queue.popleft()
-        if x1<=flag:
-            # 겹치는 구간이 있는 경우
-            if flag>y1:
-                # 이전 구간에 속하는 경우
-                flag = y1
-        else:
-            # 겹치는 구간이 없는 경우
-            flag = y1
+    flag = 0 # 0(new), 1(intersect)
+    while routes:
+        if not flag:
+            start,end = routes.popleft()
             answer += 1
-            queue.appendleft([x1,y1])
-        x0,y0 = x1,y1
-        
+            flag = 1
+        else:
+            new_start,new_end = routes.popleft()
+            if new_start<=end and new_end>=start:
+                start = max(start,new_start)
+                end = min(end,new_end)
+                flag = 1
+            else:
+                routes.appendleft([new_start,new_end])
+                flag = 0
+                
     return answer
