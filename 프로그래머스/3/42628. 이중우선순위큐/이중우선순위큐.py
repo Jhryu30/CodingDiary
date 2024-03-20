@@ -1,26 +1,19 @@
-from collections import deque
-
 def solution(operations):
     answer = []
     
     queue = []
     for oper in operations:
         cmd,num = oper.split(' ')
-        num = int(num)
         if cmd=='I':
-            queue.append(num)
-            queue.sort()
-        else:
-            if num>0:
-                queue = queue[:-1]
+            queue.append(int(num))
+        elif queue:
+            if num[0]=='-':
+                min_val = min(queue)
+                queue.remove(min_val)
             else:
-                if len(queue)>0:
-                    queue = queue[1:]
-                else:
-                    pass
-    if len(queue)>0:
-        answer = [queue[-1], queue[0]]
-    else:
-        answer = [0,0]
+                max_val = max(queue)
+                queue.remove(max_val)
+                
+    answer = [max(queue),min(queue)] if queue else [0,0]
     
     return answer
