@@ -2,13 +2,16 @@ from collections import defaultdict, deque
 
 def solution(n, computers):
     answer = 0
-    N = len(computers)
-    graph = defaultdict(list)
-    for i in range(N):
-        graph[i] = [j for j in range(N) if computers[i][j]]
     
-    def bfs(v):
-        nonlocal graph, visited
+    graph = defaultdict(list)
+    for i in range(n):
+        for j in range(n):
+            if computers[i][j]:
+                graph[i].append(j)
+                graph[j].append(i)
+                
+    def bfs(graph,v,visited):
+        nonlocal answer
         queue = deque()
         queue.append(v)
         visited[v] = 1
@@ -17,14 +20,13 @@ def solution(n, computers):
             v = queue.popleft()
             for new_v in graph[v]:
                 if not visited[new_v]:
-                    queue.append(new_v)
                     visited[new_v] = 1
+                    queue.append(new_v)
+        answer += 1
+        
+    visited = [0 for _ in range(n)]
+    for i in range(n):
+        if not visited[i]:
+            bfs(graph,i,visited)
     
-    visited = [0 for _ in range(N)]
-    for node in range(N):
-        if not visited[node]:
-            bfs(node)
-            answer += 1
-    
-            
     return answer
