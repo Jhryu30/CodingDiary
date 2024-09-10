@@ -1,27 +1,34 @@
-from collections import defaultdict
+from heapq import heappop, heappush
 
 def solution(scores):
-    answer = 0
+    answer = 1
     wanho = scores[0]
     w = sum(wanho)
-    score_dict = defaultdict(list)
+    
+    heap = []
     for x,y in scores[1:]:
         if x+y>w:
-            score_dict[x].append(y)
-        if x>wanho[0] and y>wanho[1]:
-            return -1
-        
-    if not score_dict:
-        return 1
-    xs = sorted(list(score_dict.keys()),reverse=True)
-    max_val = max(score_dict[xs[0]])
-    answer = len(score_dict[xs[0]])
-    if xs[1:]:
-        for x in xs[1:]:
-            ys = score_dict[x]
-            answer += sum([y>=max_val for y in ys])
-            max_val = max(ys+[max_val])
+            heappush(heap,(-x-y,x,y))
             
-    answer += 1
+        if wanho[0] < x and wanho[1] < y:
+            return -1
+            
+    if heap:
+        prev_k,x,y = heappop(heap)
+        left, right = (x,y), (x,y)
+        answer += 1
+    
+    while heap:
+        k,x,y = heappop(heap)
+        if k == prev_k:
+            answer += 1
+        else:
+            if (x<=left[0] and y>=left[1]):
+                left = (x,y)
+                answer += 1
+            elif (x>=right[0] and y<=right[1]):
+                right = (x,y)
+                answer += 1
+    
     
     return answer

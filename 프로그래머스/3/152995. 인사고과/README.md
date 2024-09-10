@@ -1,6 +1,6 @@
 # [level 3] 인사고과 - 152995 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/152995) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/152995#) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 09월 10일 20:22:16
+2024년 09월 10일 20:22:58
 
 ### 문제 설명
 
