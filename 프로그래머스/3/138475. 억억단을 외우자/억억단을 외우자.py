@@ -1,19 +1,21 @@
 def solution(e, starts):
-    answer = []
-    dp = [0 for _ in range(e+2)]
-    for i in range(1, e+1):
-        for j in range(i, e+1, i):
-            dp[j] += 1
-
-            
-    history = [0 for _ in range(e+1)]
-    max_idx = e
-    history[e] = e
-    for idx in range(e,min(starts)-1,-1):
-        if dp[idx]>=dp[max_idx]:
-            max_idx = idx
-        history[idx] = max_idx
+    divisor = [0 for i in range(e+1)]
+    for i in range(2,e+1):
+        for j in range(1,min(e//i+1, i)):
+            divisor[i*j] += 2
+    for i in range(1,int(e**(1/2))+1):
+        divisor[i**2] += 1
         
-    answer = [history[s] for s in starts]
+    dp = {}
+    min_s = min(starts)
+    maximum_c = 0
+    num = 0
+    for s in range(e, min_s-1, -1):
+        c = divisor[s]
+        if maximum_c <= c:
+            maximum_c = c
+            num = s
         
-    return answer
+        dp[s] = num
+    
+    return [dp[s] for s in starts]
